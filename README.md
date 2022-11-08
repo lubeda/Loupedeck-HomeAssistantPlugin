@@ -59,3 +59,7 @@ You found a bug? You have a feature request? I would love to hear about it [here
 # 6. How to contribute?
 
 Just fork the repository and create PR's.
+
+# 7 How to sponsor?
+
+[Paypal](https://www.paypal.com/donate/?hosted_button_id=FZDKSLQ46HJTU)
