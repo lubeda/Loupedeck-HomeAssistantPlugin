@@ -1,2 +1,61 @@
-# Loupedeck-HomeAssistantPlugin
-Trigger homeassistant services vie your Loupdeck
+# 1. Table of content
+- [1. Table of content](#1-table-of-content)
+- [2. What is this Plugin?](#2-what-is-this-plugin)
+- [3. Setup](#3-setup)
+- [4. How to use it?](#5-how-to-use-it)
+- [5. Support / Feedback](#4-support--feedback)
+- [6. How to contribute?](#6-how-to-contribute)
+- [7. Sponsor me!](#7-how-to-sponsor)
+
+# 2. What is this Plugin?
+This Loupedeck Plugin allows you to control your home with [HomeAssistant](https://homeassistant.io)
+
+It is in a very basic state. You can only call services that need no parameters.
+There is only a windows version of it.
+The code is really hacky, there are no plausibiliy controls etc. so expect crashing the louepdesk exe.
+
+# 3 Setup
+Install (if available) a binary release of the plugin.
+
+create a homeassistant.json like this 
+```json
+{
+  "token": "YourLongLivedToken",
+  "url": "http://homeassistant.local:8123/api/",
+  "entries": [
+    {
+      "service": "light.turn_on",
+      "entities": [
+        "light.light_1",
+        "light.light_2",
+        "light.light_4"
+      ]
+    },
+    {
+      "service": "switch.toggle",
+      "entities": [
+        "switch.plug_1",
+        "switch.cover_3",
+        "switch.light_65"
+      ]
+    }
+  ]
+}
+```
+replace the fields with your values.
+
+place the file in `%userprofile%\.loupedeck\homeassistant\` as `homeassistant.json`
+
+# 5. How to use it?
+
+1. Install the Plugin
+2. Create a config 
+3. Add Actions to Loupedeck
+4. Have fun controlling your home
+
+# 4. Support / Feedback
+You found a bug? You have a feature request? I would love to hear about it [here](https://github.com/lubeda/Loupedeck-HomeAssistantPlugin/issues/new/choose) or click on the "Issues" tab here on the GitHub repositorie!
+
+# 6. How to contribute?
+
+Just fork the repository and create PR's.
