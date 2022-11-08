@@ -59,15 +59,5 @@ namespace Loupedeck.HomeAssistantPlugin.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] homeassistant {
-            get {
-                object obj = ResourceManager.GetObject("homeassistant", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }
