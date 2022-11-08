@@ -18,7 +18,7 @@ pluginFileName: HomeAssistantPlugin.dll
 version: 0.1
 
 # Author of the plugin. The author can be a company or an individual developer.
-author: Ludger Berse (lubeda)
+author: lubeda
 
 # Copyright information.
 copyright: Copyright © 2022 Ludger. All rights reserved.
@@ -30,7 +30,7 @@ copyright: Copyright © 2022 Ludger. All rights reserved.
 
 # Location of plugin files on Windows (relative to the plugin base directory).
 # This parameter is required to support Windows.
-pluginFolderWin: win
+pluginFolderWin: win/
 
 # Location of plugin files on macOS (relative to the plugin base directory).
 # This parameter is required to support Mac.
@@ -39,7 +39,9 @@ pluginFolderWin: win
 # List of supported devices.
 supportedDevices:
     # LoupedeckCtFamily covers the following devices: Loupedeck CT, Live and Live S, and Razer Stream Controller.
-    - LoupedeckCtFamily
+    #- LoupedeckCtFamily
+    - LoupedeckCt
+    - LoupedeckLive
 
     # LoupedeckPlusFamily covers Loupedeck+ device. Uncomment the following line to support Loupedeck+.
     #- LoupedeckPlusFamily
@@ -67,7 +69,7 @@ licenseUrl: https://opensource.org/licenses/MIT
 # URL of the support page where the users can send improvement suggestions and report bugs.
 # The URL is shown in Loupedeck Marketplace. The page can be for example a GitHub issues page.
 # NOTE: This setting is recommended when publishing the plugin in Loupedeck Marketplace.
-supportPageUrl: https://github.com/lubeda/Loupedeck.HomeAssistantPlugin/issues
+supportPageUrl: https://github.com/lubeda/Loupedeck-HomeAssistantPlugin/issues
 
 # URL of the plugin homepage. The URL is shown in Loupedeck Marketplace.
-homePageUrl: https://github.com/lubeda/Loupedeck.HomeAssistantPlugin
+homePageUrl: https://github.com/lubeda/Loupedeck-HomeAssistantPlugin

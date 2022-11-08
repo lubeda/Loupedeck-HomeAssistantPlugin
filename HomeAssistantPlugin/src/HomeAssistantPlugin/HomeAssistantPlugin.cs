@@ -32,7 +32,7 @@ namespace Loupedeck.HomeAssistantPlugin
         }
 
         internal static HAAPIConfig Config;
-        
+
         public override void Load()
         {
             this.Init();
@@ -40,13 +40,14 @@ namespace Loupedeck.HomeAssistantPlugin
                 ? JsonHelpers.DeserializeAnyObjectFromFile<HAAPIConfig>(this.ConfigFile)
                 : null;
         }
-        
         // This method is called when the plugin is unloaded during the Loupedeck service shutdown.
         public override void Unload()
         {
         }
+
         
-        private void Init()
+
+            private void Init()
         {
             if (!Directory.Exists(Path.Combine(UserProfilePath, DEFAULT_PATH)))
             {
