@@ -29,6 +29,7 @@ namespace Loupedeck.HomeAssistantPlugin
             public String Token;
 
             public HAServiceEntry[] Entries;
+            public String[] States;
         }
 
         internal static HAAPIConfig Config;
@@ -45,9 +46,7 @@ namespace Loupedeck.HomeAssistantPlugin
         {
         }
 
-        
-
-            private void Init()
+        private void Init()
         {
             if (!Directory.Exists(Path.Combine(UserProfilePath, DEFAULT_PATH)))
             {
