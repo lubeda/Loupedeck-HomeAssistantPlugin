@@ -14,7 +14,7 @@ It is in a very basic state. You can only call services that need no parameters.
 There is only a windows version of it.
 The code is really hacky, there are no plausibiliy controls etc. so expect crashing the louepdesk exe.
 
-# 3 Setup
+# 3. Setup
 Install (if available) a binary release of the plugin.
 
 create a homeassistant.json like this 
@@ -46,7 +46,7 @@ replace the fields with your values.
 
 place the file in `%userprofile%\.loupedeck\homeassistant\` as `homeassistant.json`
 
-# 5. How to use it?
+# 4. How to use it?
 
 1. Install the Plugin
 2. Create a config 
@@ -55,7 +55,7 @@ place the file in `%userprofile%\.loupedeck\homeassistant\` as `homeassistant.js
 
 As addition see this video [youtube](https://youtu.be/9kJEw0r1UN4)) or the discussion in the home assistant [community](https://community.home-assistant.io/t/use-a-loupedeck-as-a-panel-for-homeassistant/486240) 
 
-# 4. Support / Feedback
+# 5. Support / Feedback
 You found a bug? You have a feature request? I would love to hear about it [here](https://github.com/lubeda/Loupedeck-HomeAssistantPlugin/issues/new/choose) or click on the "Issues" tab here on the GitHub repositorie!
 
 # 6. How to contribute?
