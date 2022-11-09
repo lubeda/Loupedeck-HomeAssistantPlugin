@@ -53,7 +53,7 @@ place the file in `%userprofile%\.loupedeck\homeassistant\` as `homeassistant.js
 3. Add Actions to Loupedeck
 4. Have fun controlling your home
 
-As addition see this video [youtube](https://youtu.be/_pg8vfncfj0) or the discussion in the home assistant [community](https://community.home-assistant.io/t/use-a-loupedeck-as-a-panel-for-homeassistant/486240) 
+As addition see this video [youtube](https://youtu.be/9kJEw0r1UN4)) or the discussion in the home assistant [community](https://community.home-assistant.io/t/use-a-loupedeck-as-a-panel-for-homeassistant/486240) 
 
 # 4. Support / Feedback
 You found a bug? You have a feature request? I would love to hear about it [here](https://github.com/lubeda/Loupedeck-HomeAssistantPlugin/issues/new/choose) or click on the "Issues" tab here on the GitHub repositorie!
