@@ -6,9 +6,6 @@
     using System.Net.Http.Headers;
     using System.Text.Json.Nodes;
     using System.Timers;
-    using System.Web;
-
-
     class HomeAssistantStateCommand : PluginDynamicCommand
     {
         protected HttpClient httpClient = new HttpClient();
@@ -51,12 +48,11 @@
                 return null;
             }
 
-            StateData s = this.GetStateData(actionParameter);
+            StateData s = this.GetStateData(actionParameter); 
             if (!s.IsValid)
             {
                 return null;
             }
-
             var img = new BitmapBuilder(imageSize);
             using (var bitmapBuilder = new BitmapBuilder(imageSize))
             {
@@ -68,34 +64,26 @@
                 }
                 else
                 {
-                    bitmapBuilder.DrawText(actionParameter);
+                    bitmapBuilder.DrawText("Error");
                 }
-
-
                 return bitmapBuilder.ToImage();
             }
         }
-
         protected StateData GetStateData(string actionParameter)
         {
             StateData d;
+
             if (this.stateData.TryGetValue(actionParameter, out d))
+            {
                 return d;
+            }
 
             d = new StateData();
-            stateData[actionParameter] = d;
-
-            LoadData(actionParameter);
-
-            return d;
-        }
-
-        protected StateData _GetStateData(String actionParameter)
-        {
+            this.stateData[actionParameter] = d;
 
             this.LoadData(actionParameter);
 
-            return this.stateData[actionParameter];
+            return d;
         }
 
         protected async void LoadData(String actionParameter)
@@ -111,13 +99,14 @@
             }
 
             StateData d = this.GetStateData(actionParameter);
+
             if (d.IsLoading)
             {
                 return;
             }
 
             d.IsLoading = true;
-
+            
             try
             {
                 var _client = new HttpClient();
@@ -130,7 +119,7 @@
             }
             catch (Exception e)
             {
-                d.state = "error";
+                d.state = "Error";
             }
             finally
             {

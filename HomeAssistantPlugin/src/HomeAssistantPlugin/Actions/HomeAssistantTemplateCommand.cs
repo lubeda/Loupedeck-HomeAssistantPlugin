@@ -81,9 +81,9 @@
                 return d;
 
             d = new TemplateData();
-            templateData[actionParameter] = d;
+            this.templateData[actionParameter] = d;
 
-            LoadData(actionParameter);
+            this.LoadData(actionParameter);
 
             return d;
         }
@@ -126,7 +126,7 @@
             }
             catch (Exception e)
             {
-                d.template = "error";
+                d.template = "Error";
             }
             finally
             {
