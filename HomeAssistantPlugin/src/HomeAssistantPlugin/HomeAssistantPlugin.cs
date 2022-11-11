@@ -21,7 +21,6 @@ namespace Loupedeck.HomeAssistantPlugin
         {
             public String Service;
             public String[] Entities;
-
         }
         public class HAAPIConfig
         {
@@ -50,7 +49,6 @@ namespace Loupedeck.HomeAssistantPlugin
         {
             if (!Directory.Exists(Path.Combine(UserProfilePath, DEFAULT_PATH)))
             {
-             
                 Directory.CreateDirectory(Path.Combine(UserProfilePath, DEFAULT_PATH));
             }
             var fp = Path.Combine(UserProfilePath, DEFAULT_PATH);
