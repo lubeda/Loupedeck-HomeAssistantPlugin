@@ -6,12 +6,10 @@
 
     public class HomeAssistandCommand : PluginDynamicCommand
     {
- 
-        public HomeAssistandCommand() : base("Home assistant", "Controll your Home", "Entity")
-        {   
+        public HomeAssistandCommand() : base("Call Service", "Controll your Home", "Entity")
+        {
             this.MakeProfileAction("tree");
         }
-
         protected override PluginProfileActionData GetProfileActionData()
         {
             var tree = new PluginProfileActionTree("Select Service and entity");
@@ -27,7 +25,7 @@
                         foreach (String s in e.Entities)
                         {
                             pluginProfileActionTreeNode.SetPropertyValue("Service", e.Service);
-                            pluginProfileActionTreeNode.AddItem(e.Service + "|" + s,s,e.Service);
+                            pluginProfileActionTreeNode.AddItem(e.Service + "|" + s, s, e.Service);
                         }
                     }
                 }
@@ -37,7 +35,7 @@
 
         protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize) => String.IsNullOrEmpty(actionParameter) ? "HomeAssistant" : actionParameter;
 
-        
+
         protected override void RunCommand(String actionParameter)
         {
             if (actionParameter.Contains("|"))
@@ -50,25 +48,9 @@
                 var body = @"{""entity_id"": """ + entity + @"""}";
                 _client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", HomeAssistantPlugin.HomeAssistantPlugin.Config.Token);
-                var content = new StringContent(body,System.Text.Encoding.UTF8, "application/json"); //https://developers.home-assistant.io/docs/api/rest/
+                var content = new StringContent(body, System.Text.Encoding.UTF8, "application/json"); //https://developers.home-assistant.io/docs/api/rest/
                 _client.PostAsync(url, content);
             }
         }
-
-        /*
-        protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize)
-        {
-
-            using (var bitmapBuilder = new BitmapBuilder(imageSize))
-            {
-                bitmapBuilder.Clear(BitmapColor.Black);
-                if (actionParameter.Contains("|"))
-                {
-                    bitmapBuilder.DrawText(actionParameter.Split("|")[1].Replace(".",".\n"), BitmapColor.White, 15, 13, 3);
-                } 
-                return bitmapBuilder.ToImage();
-            }
-        } */
-
     }
 }
