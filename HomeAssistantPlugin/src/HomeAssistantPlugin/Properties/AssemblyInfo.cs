@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("HomeAssistant plugin for Loupedeck")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("LoupeDeck Oy")]
+[assembly: AssemblyDescription("Control your Home")]
+[assembly: AssemblyConfiguration("See githubpage for information.")]
+[assembly: AssemblyCompany("lubeda")]
 [assembly: AssemblyProduct("Loupedeck2")]
-[assembly: AssemblyCopyright("Copyright (c) 2018 LoupeDeck Oy. All rights reserved.")]
+[assembly: AssemblyCopyright("MIT")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

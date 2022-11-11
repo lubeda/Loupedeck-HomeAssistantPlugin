@@ -1,17 +1,15 @@
-﻿namespace Loupedeck.HomeAssistantPlugin
+﻿namespace Loupedeck.HomeAssistantPlugin.Actions
 {
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Reflection;
     using System.Text.Json.Nodes;
     using System.Timers;
-
     class HomeAssistantStateCommand : PluginDynamicCommand
     {
         protected HttpClient httpClient = new HttpClient();
-        protected IDictionary<String, StateData> stateData = new Dictionary<String, StateData>();
+        protected IDictionary<string, StateData> stateData = new Dictionary<string, StateData>();
         protected Timer timer;
 
         protected class StateData
@@ -21,7 +19,7 @@
             public Boolean IsLoading = false;
         }
 
-        public HomeAssistantStateCommand() : base("Get a state", "Get the state value of an entity.", "")
+        public HomeAssistantStateCommand() : base("Get State", "Get the state of an entity", "")
         {
             this.MakeProfileAction("text;Enter entity");
 
@@ -50,9 +48,8 @@
                 return null;
             }
 
-            StateData s = this.GetStateData(actionParameter);
+            StateData s = this.GetStateData(actionParameter); 
             
-            var img = new BitmapBuilder(imageSize);
             using (var bitmapBuilder = new BitmapBuilder(imageSize))
             {
                 var fn = EmbeddedResources.FindFile("ButtonBaseHomeAssistant.png");
@@ -63,29 +60,28 @@
                 }
                 else
                 {
-                    bitmapBuilder.DrawText(actionParameter);
+                    bitmapBuilder.DrawText("Error");
                 }
                 return bitmapBuilder.ToImage();
             }
         }
-
         protected StateData GetStateData(String actionParameter)
         {
             StateData d;
-            
-            if (this.stateData.TryGetValue(actionParameter, out d))
-            {
-                return d;
-            }
 
-            d = new StateData();
-            this.stateData[actionParameter] = d;
+            if (!this.stateData.ContainsKey(actionParameter))
+            {
+                d = new StateData();
+                this.stateData[actionParameter] = d;
+            } else
+            {
+                d = this.stateData[actionParameter];
+            }
 
             this.LoadData(actionParameter);
 
             return d;
         }
-
         protected async void LoadData(String actionParameter)
         {
             if (actionParameter == null)
@@ -93,54 +89,41 @@
                 return;
             }
 
+            if (this.stateData[actionParameter] == null)
+            {
+                this.stateData[actionParameter] = new StateData();
+            }
+
             StateData d = this.GetStateData(actionParameter);
-            
+
             if (d.IsLoading)
             {
-                d.IsValid = false;
                 return;
             }
 
             d.IsLoading = true;
-
+            
             try
             {
                 var _client = new HttpClient();
-
                 var url = HomeAssistantPlugin.Config.Url + "states/" + actionParameter;
                 _client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", HomeAssistantPlugin.Config.Token);
-                var resp = await _client.GetAsync(url);
-                if (resp.IsSuccessStatusCode)
-                {
-                    try
-                    {
-                        var body = await resp.Content.ReadAsStringAsync();
-                        var json = JsonNode.Parse(body);
-                        d.state = json["state"].GetValue<String>();
-                        d.IsValid = true;
-                    } 
-                    catch (HttpRequestException e)
-                    {
-                        d.state = e.Message;
-                        d.IsValid = true;
-                    }
-                }
-                else
-                { 
-                    d.state = "Error1"; 
-                }
-
+                HttpResponseMessage resp = await _client.GetAsync(url);
+                var json = JsonNode.Parse(await resp.Content.ReadAsStringAsync());
+                d.state = json["state"].GetValue<String>();
             }
             catch (Exception e)
             {
-                d.state = "Error2";
+                d.state = "Error";
             }
             finally
             {
                 d.IsLoading = false;
+                d.IsValid = true;
                 this.ActionImageChanged(actionParameter);
             }
         }
     }
+
 }
