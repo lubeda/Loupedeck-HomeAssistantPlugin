@@ -81,9 +81,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Actions\HomeAssistantTest.cs" />
-    <Compile Include="Actions\HomeAssistantTemplateCommand.cs" />
     <Compile Include="Actions\HomeAssistantStateCommand.cs" />
+    <Compile Include="Actions\HomeAssistantTemplateCommand.cs" />
+    <None Include="Actions\_HomeAssistantStateCommand.cs" />
     <Compile Include="Actions\HomeAssistantServiceComand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HomeAssistantApplication.cs" />
