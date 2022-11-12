@@ -1,6 +1,7 @@
 ﻿namespace Loupedeck.HomeAssistantPlugin
 {
     using System;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Net.Http.Headers;
@@ -12,6 +13,10 @@
         protected IDictionary<string, TemplateData> templateData = new Dictionary<string, TemplateData>();
         protected Timer timer;
 
+        protected class TemplateObject
+        {
+            public String template;
+        }
         protected class TemplateData
         {
             public String template;
@@ -115,7 +120,12 @@
                 var body = @"{""template"": """ + actionParameter + @"""}";
                 _client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", HomeAssistantPlugin.Config.Token);
-                var content = new StringContent(body, System.Text.Encoding.UTF8, "application/json"); //https://developers.home-assistant.io/docs/api/rest/
+
+                var t = new TemplateObject () { template = actionParameter};
+                var strJson = JsonConvert.SerializeObject(t);
+                
+                var content = new StringContent(strJson, System.Text.Encoding.UTF8, "application/json"); //https://developers.home-assistant.io/docs/api/rest/
+                
                 var resp = await _client.PostAsync(url, content);
                 if (resp.IsSuccessStatusCode)
                 { d.template = await resp.Content.ReadAsStringAsync(); }

@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Reflection;
     using System.Text.Json.Nodes;
     using System.Timers;
 
@@ -20,7 +19,6 @@
             public Boolean IsValid = false;
             public Boolean IsLoading = false;
         }
-
         public HomeAssistantStateCommand() : base("Get a state", "Get the state value of an entity.", "")
         {
             this.MakeProfileAction("text;Enter entity");
@@ -41,14 +39,17 @@
         protected override void RunCommand(String actionParameter)
         {
             this.LoadData(actionParameter);
+            this.ActionImageChanged(actionParameter);
         }
 
         protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize)
         {
-            if (actionParameter == null)
+            /*
+             * if (actionParameter == null)
             {
                 return null;
             }
+            */
 
             StateData s = this.GetStateData(actionParameter);
             
