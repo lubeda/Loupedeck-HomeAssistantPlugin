@@ -89,7 +89,7 @@
     <Compile Include="Actions\HomeAssistantTemplateCommand.cs" />
     <None Include="Actions\_HomeAssistantStateCommand.cs" />
     <Compile Include="Actions\HomeAssistantServiceComand.cs" />
-    <Compile Include="Actions\HomeAssistantImageCommand.cs" />
+    <None Include="Actions\HomeAssistantImageCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HomeAssistantApplication.cs" />
     <Compile Include="HomeAssistantPlugin.cs" />

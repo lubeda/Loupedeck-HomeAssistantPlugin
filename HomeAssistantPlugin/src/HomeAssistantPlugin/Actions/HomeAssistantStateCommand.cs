@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Text.Json.Nodes;
+    using Newtonsoft.Json;
     using System.Timers;
+    using System.Collections;
 
     class HomeAssistantStateCommand : PluginDynamicCommand
     {
@@ -16,6 +17,11 @@
         protected class StateData
         {
             public String state;
+            public String entity_id;
+            public Hashtable attributes;
+            public Hashtable context;
+            public DateTime last_changed;
+            public DateTime last_updated;
             public Boolean IsValid = false;
             public Boolean IsLoading = false;
         }
@@ -117,9 +123,15 @@
                     try
                     {
                         var body = await resp.Content.ReadAsStringAsync();
-                        var json = JsonNode.Parse(body);
-                        d.state = json["state"].GetValue<String>();
-                        d.IsValid = true;
+                        StateData json = JsonConvert.DeserializeObject<StateData>(body);
+                        
+                        if (json.state != null)
+                        { 
+                            d.state = json.state;
+                            d.IsValid = true;
+                        }
+                        
+                        
                     } 
                     catch (HttpRequestException e)
                     {
