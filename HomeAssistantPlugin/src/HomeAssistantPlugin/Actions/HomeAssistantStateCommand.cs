@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Reflection;
-    using System.Text.Json.Nodes;
+    using Newtonsoft.Json;
     using System.Timers;
+    using System.Collections;
 
     class HomeAssistantStateCommand : PluginDynamicCommand
     {
@@ -17,10 +17,14 @@
         protected class StateData
         {
             public String state;
+            public String entity_id;
+            public Hashtable attributes;
+            public Hashtable context;
+            public DateTime last_changed;
+            public DateTime last_updated;
             public Boolean IsValid = false;
             public Boolean IsLoading = false;
         }
-
         public HomeAssistantStateCommand() : base("Get a state", "Get the state value of an entity.", "")
         {
             this.MakeProfileAction("text;Enter entity");
@@ -41,14 +45,17 @@
         protected override void RunCommand(String actionParameter)
         {
             this.LoadData(actionParameter);
+            this.ActionImageChanged(actionParameter);
         }
 
         protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize)
         {
-            if (actionParameter == null)
+            /*
+             * if (actionParameter == null)
             {
                 return null;
             }
+            */
 
             StateData s = this.GetStateData(actionParameter);
             
@@ -116,9 +123,15 @@
                     try
                     {
                         var body = await resp.Content.ReadAsStringAsync();
-                        var json = JsonNode.Parse(body);
-                        d.state = json["state"].GetValue<String>();
-                        d.IsValid = true;
+                        StateData json = JsonConvert.DeserializeObject<StateData>(body);
+                        
+                        if (json.state != null)
+                        { 
+                            d.state = json.state;
+                            d.IsValid = true;
+                        }
+                        
+                        
                     } 
                     catch (HttpRequestException e)
                     {
