@@ -1,25 +1,30 @@
-﻿namespace Loupedeck.HomeAssistantPlugin.Actions
+﻿namespace Loupedeck.HomeAssistantPlugin
 {
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Text.Json.Nodes;
+    using Newtonsoft.Json;
     using System.Timers;
+    using System.Collections;
+
     class HomeAssistantStateCommand : PluginDynamicCommand
     {
-        protected HttpClient httpClient = new HttpClient();
-        protected IDictionary<string, StateData> stateData = new Dictionary<string, StateData>();
+        protected IDictionary<String, StateData> stateData = new Dictionary<String, StateData>();
         protected Timer timer;
 
         protected class StateData
         {
             public String state;
+            public String entity_id;
+            public Hashtable attributes;
+            public Hashtable context;
+            public DateTime last_changed;
+            public DateTime last_updated;
             public Boolean IsValid = false;
             public Boolean IsLoading = false;
         }
-
-        public HomeAssistantStateCommand() : base("Get State", "Get the state of an entity", "")
+        public HomeAssistantStateCommand() : base("Get a state", "Get the state value of an entity.", "")
         {
             this.MakeProfileAction("text;Enter entity");
 
@@ -39,17 +44,21 @@
         protected override void RunCommand(String actionParameter)
         {
             this.LoadData(actionParameter);
+            this.ActionImageChanged(actionParameter);
         }
 
         protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize)
         {
-            if (actionParameter == null)
+            /*
+             * if (actionParameter == null)
             {
                 return null;
             }
+            */
 
-            StateData s = this.GetStateData(actionParameter); 
-            
+            StateData s = this.GetStateData(actionParameter);
+
+            var img = new BitmapBuilder(imageSize);
             using (var bitmapBuilder = new BitmapBuilder(imageSize))
             {
                 var fn = EmbeddedResources.FindFile("ButtonBaseHomeAssistant.png");
@@ -60,28 +69,29 @@
                 }
                 else
                 {
-                    bitmapBuilder.DrawText("Error");
+                    bitmapBuilder.DrawText(actionParameter);
                 }
                 return bitmapBuilder.ToImage();
             }
         }
+
         protected StateData GetStateData(String actionParameter)
         {
             StateData d;
 
-            if (!this.stateData.ContainsKey(actionParameter))
+            if (this.stateData.TryGetValue(actionParameter, out d))
             {
-                d = new StateData();
-                this.stateData[actionParameter] = d;
-            } else
-            {
-                d = this.stateData[actionParameter];
+                return d;
             }
+
+            d = new StateData();
+            this.stateData[actionParameter] = d;
 
             this.LoadData(actionParameter);
 
             return d;
         }
+
         protected async void LoadData(String actionParameter)
         {
             if (actionParameter == null)
@@ -89,41 +99,60 @@
                 return;
             }
 
-            if (this.stateData[actionParameter] == null)
-            {
-                this.stateData[actionParameter] = new StateData();
-            }
-
             StateData d = this.GetStateData(actionParameter);
 
             if (d.IsLoading)
             {
+                d.IsValid = false;
                 return;
             }
 
             d.IsLoading = true;
-            
+
             try
             {
-                var _client = new HttpClient();
-                var url = HomeAssistantPlugin.Config.Url + "states/" + actionParameter;
-                _client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", HomeAssistantPlugin.Config.Token);
-                HttpResponseMessage resp = await _client.GetAsync(url);
-                var json = JsonNode.Parse(await resp.Content.ReadAsStringAsync());
-                d.state = json["state"].GetValue<String>();
+                using (var _client = new HttpClient())
+                {
+                    var url = HomeAssistantPlugin.Config.Url + "states/" + actionParameter;
+                    _client.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", HomeAssistantPlugin.Config.Token);
+                    var resp = await _client.GetAsync(url);
+                    if (resp.IsSuccessStatusCode)
+                    {
+                        try
+                        {
+                            var body = await resp.Content.ReadAsStringAsync();
+                            StateData json = JsonConvert.DeserializeObject<StateData>(body);
+
+                            if (json.state != null)
+                            {
+                                d.state = json.state;
+                                d.IsValid = true;
+                            }
+
+
+                        }
+                        catch (HttpRequestException e)
+                        {
+                            d.state = e.Message;
+                            d.IsValid = true;
+                        }
+                    }
+                    else
+                    {
+                        d.state = "Error1";
+                    }
+                }
             }
             catch (Exception e)
             {
-                d.state = "Error";
+                d.state = "Error2";
             }
             finally
             {
                 d.IsLoading = false;
-                d.IsValid = true;
                 this.ActionImageChanged(actionParameter);
             }
         }
     }
-
 }

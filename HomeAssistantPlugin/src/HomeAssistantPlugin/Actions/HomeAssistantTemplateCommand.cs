@@ -9,8 +9,7 @@
 
     class HomeAssistantTemplateCommand : PluginDynamicCommand
     {
-        protected HttpClient httpClient = new HttpClient();
-        protected IDictionary<string, TemplateData> templateData = new Dictionary<string, TemplateData>();
+        protected IDictionary<String, TemplateData> templateData = new Dictionary<String, TemplateData>();
         protected Timer timer;
 
         protected class TemplateObject
@@ -80,9 +79,10 @@
 
         protected TemplateData GetTemplateData(String actionParameter)
         {
-            TemplateData d;
-            if (this.templateData.TryGetValue(actionParameter, out d))
+            if (this.templateData.TryGetValue(actionParameter, out var d))
+            {
                 return d;
+            }
 
             d = new TemplateData();
             this.templateData[actionParameter] = d;
@@ -114,28 +114,33 @@
 
             try
             {
-                var _client = new HttpClient();
+                using (var _client = new HttpClient())
+                {
+                    var url = HomeAssistantPlugin.Config.Url + "template";
+                    var body = @"{""template"": """ + actionParameter + @"""}";
+                    _client.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", HomeAssistantPlugin.Config.Token);
 
-                var url = HomeAssistantPlugin.Config.Url + "template";
-                var body = @"{""template"": """ + actionParameter + @"""}";
-                _client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", HomeAssistantPlugin.Config.Token);
+                    var t = new TemplateObject() { template = actionParameter };
+                    var strJson = JsonConvert.SerializeObject(t);
 
-                var t = new TemplateObject () { template = actionParameter};
-                var strJson = JsonConvert.SerializeObject(t);
-                
-                var content = new StringContent(strJson, System.Text.Encoding.UTF8, "application/json"); //https://developers.home-assistant.io/docs/api/rest/
-                
-                var resp = await _client.PostAsync(url, content);
-                if (resp.IsSuccessStatusCode)
-                { d.template = await resp.Content.ReadAsStringAsync(); }
-                else
-                { d.template = "Error"; }
+                    var content = new StringContent(strJson, System.Text.Encoding.UTF8, "application/json"); //https://developers.home-assistant.io/docs/api/rest/
 
+                    var resp = await _client.PostAsync(url, content);
+
+                    if (resp.IsSuccessStatusCode)
+                    { 
+                        d.template = await resp.Content.ReadAsStringAsync(); 
+                    }
+                    else
+                    { 
+                        d.template = "Error request"; 
+                    }
+                }
             }
             catch (Exception e)
             {
-                d.template = "Error";
+                d.template = "Error http";
             }
             finally
             {

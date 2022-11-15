@@ -10,7 +10,7 @@
 
     class HomeAssistantStateCommand : PluginDynamicCommand
     {
-        protected HttpClient httpClient = new HttpClient();
+     
         protected IDictionary<String, StateData> stateData = new Dictionary<String, StateData>();
         protected Timer timer;
 
@@ -25,6 +25,7 @@
             public Boolean IsValid = false;
             public Boolean IsLoading = false;
         }
+     
         public HomeAssistantStateCommand() : base("Get a state", "Get the state value of an entity.", "")
         {
             this.MakeProfileAction("text;Enter entity");
@@ -50,15 +51,9 @@
 
         protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize)
         {
-            /*
-             * if (actionParameter == null)
-            {
-                return null;
-            }
-            */
 
             StateData s = this.GetStateData(actionParameter);
-            
+
             var img = new BitmapBuilder(imageSize);
             using (var bitmapBuilder = new BitmapBuilder(imageSize))
             {
@@ -78,9 +73,8 @@
 
         protected StateData GetStateData(String actionParameter)
         {
-            StateData d;
-            
-            if (this.stateData.TryGetValue(actionParameter, out d))
+
+            if (this.stateData.TryGetValue(actionParameter, out var d))
             {
                 return d;
             }
@@ -101,7 +95,7 @@
             }
 
             StateData d = this.GetStateData(actionParameter);
-            
+
             if (d.IsLoading)
             {
                 d.IsValid = false;
@@ -112,42 +106,40 @@
 
             try
             {
-                var _client = new HttpClient();
-
-                var url = HomeAssistantPlugin.Config.Url + "states/" + actionParameter;
-                _client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", HomeAssistantPlugin.Config.Token);
-                var resp = await _client.GetAsync(url);
-                if (resp.IsSuccessStatusCode)
+                using (var _client = new HttpClient())
                 {
-                    try
+                    var url = HomeAssistantPlugin.Config.Url + "states/" + actionParameter;
+                    _client.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", HomeAssistantPlugin.Config.Token);
+                    var resp = await _client.GetAsync(url);
+                    if (resp.IsSuccessStatusCode)
                     {
-                        var body = await resp.Content.ReadAsStringAsync();
-                        StateData json = JsonConvert.DeserializeObject<StateData>(body);
-                        
-                        if (json.state != null)
-                        { 
-                            d.state = json.state;
+                        try
+                        {
+                            var body = await resp.Content.ReadAsStringAsync();
+                            StateData json = JsonConvert.DeserializeObject<StateData>(body);
+
+                            if (json.state != null)
+                            {
+                                d.state = json.state;
+                                d.IsValid = true;
+                            }
+                        }
+                        catch (HttpRequestException e)
+                        {
+                            d.state = e.Message;
                             d.IsValid = true;
                         }
-                        
-                        
-                    } 
-                    catch (HttpRequestException e)
+                    }
+                    else
                     {
-                        d.state = e.Message;
-                        d.IsValid = true;
+                        d.state = "Error\nrequest";
                     }
                 }
-                else
-                { 
-                    d.state = "Error1"; 
-                }
-
             }
             catch (Exception e)
             {
-                d.state = "Error2";
+                d.state = "Error httpclient";
             }
             finally
             {
