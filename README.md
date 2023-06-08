@@ -8,16 +8,16 @@
 - [7. Sponsor me!](#7-how-to-sponsor)
 
 # 2. What is this Plugin?
-This Loupedeck Plugin allows you to control your home with [HomeAssistant](https://homeassistant.io)
+This Loupedeck Plugin allows you to control your home with [Home Assistant](https://homeassistant.io)
 
 It is in a very basic state. You can only call services that need no parameters.
-There is only a windows version of it.
-The code is really hacky, there are no plausibiliy controls etc. so expect crashing the louepdesk exe.
+There is only a Windows version of it.
+The code is really hacky, there are no plausibility controls etc. so expect crashing the loupedesk.exe.
 
 # 3. Setup
 Install (if available) a binary release of the plugin.
 
-create a homeassistant.json like this 
+Create a homeassistant.json like this 
 ```json
 {
   "token": "YourLongLivedToken",
@@ -42,9 +42,9 @@ create a homeassistant.json like this
   ]
 }
 ```
-replace the fields with your values.
+Replace the fields with your values.
 
-place the file in `%userprofile%\.loupedeck\homeassistant\` as `homeassistant.json`
+Place the file in `%userprofile%\.loupedeck\homeassistant\` as `homeassistant.json`
 
 # 4. How to use it?
 
@@ -53,10 +53,10 @@ place the file in `%userprofile%\.loupedeck\homeassistant\` as `homeassistant.js
 3. Add Actions to Loupedeck
 4. Have fun controlling your home
 
-As addition see this video [youtube](https://youtu.be/9kJEw0r1UN4) or the discussion in the home assistant [community](https://community.home-assistant.io/t/use-a-loupedeck-as-a-panel-for-homeassistant/486240) 
+In addition, see this video [youtube](https://youtu.be/9kJEw0r1UN4) or the discussion in the home assistant [community](https://community.home-assistant.io/t/use-a-loupedeck-as-a-panel-for-homeassistant/486240) 
 
 # 5. Support / Feedback
-You found a bug? You have a feature request? I would love to hear about it [here](https://github.com/lubeda/Loupedeck-HomeAssistantPlugin/issues/new/choose) or click on the "Issues" tab here on the GitHub repositorie!
+Do you found a bug? Do you have a feature request? I would love to hear about it [here](https://github.com/lubeda/Loupedeck-HomeAssistantPlugin/issues/new/choose) or click on the “Issues” tab here on the GitHub repositories!
 
 # 6. How to contribute?
 
