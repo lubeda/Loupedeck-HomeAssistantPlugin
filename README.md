@@ -12,7 +12,9 @@ This Loupedeck Plugin allows you to control your home with [HomeAssistant](https
 
 It is in a very basic state. You can only call services that need no parameters.
 There is only a windows version of it.
-The code is really hacky, there are no plausibiliy controls etc. so expect crashing the louepdesk exe.
+The code is really hacky, there are no plausibiliy controls etc. so expect crashing the loupedesk exe.
+
+Take a look here [https://github.com/schmic/Loupedeck-HomeAssistant](https://github.com/schmic/Loupedeck-HomeAssistant) for a websocket bases solution under active development.
 
 # 3. Setup
 Install (if available) a binary release of the plugin.
